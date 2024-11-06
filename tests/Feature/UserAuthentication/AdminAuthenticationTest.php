@@ -18,9 +18,21 @@ class AdminAuthenticationTest extends TestCase
 
         $user = User::factory()->create();
 
+        $userLoginDetails =[
+            'email' => $user->email,
+            'password' => '12345678'
+        ];
         //A- Action the test case
-        $response = $this->get( 'api/user-sign-in');
-        dd( $response->json() );
+        $response = $this->post( 'api/user-sign-in', $userLoginDetails);
+
+
+        //A - Assertion the test outcome
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+           'user_first_name',
+           'user_last_name',
+           'user_token'
+        ]);
 
     }
 
